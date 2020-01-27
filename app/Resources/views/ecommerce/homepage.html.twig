@@ -1,0 +1,49 @@
+{% extends "ecommerce/base.html.twig" %}
+
+    {% if cart is defined and cart is not empty %}
+        {% block metadata %}
+            <meta http-equiv="refresh" content="{{ getTimeToLive(cart) }}">
+        {% endblock metadata %}
+    {% endif %}
+
+{% block main %}
+
+    <div class="list-container">
+        <table id="productList" class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Model</th>
+                <th scope="col">Registration</th>
+                <th scope="col">Engine Size</th>
+                <th scope="col">Tags</th>
+                <th scope="col">In Stock</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% if inventory is defined and inventory is not empty %}
+                {% for stock in inventory %}
+                    {% set inCart =  false %}
+                    {% if cart is defined and cart is not empty %}
+                        {% set inCart =  cart.containsProduct(stock.getCar().getId()) %}
+                    {% endif %}
+                    {% include "ecommerce/_single_car_list.html.twig"  with {'stock': stock, "inCart": inCart, 'index': loop.index } only %}
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="9" align="center">
+                        Currently there are no &#128663; in the inventory. Please check again soon!
+                    </td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock main %}
+
+{% block body_javascripts %}
+{% endblock body_javascripts %}

@@ -1,0 +1,167 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+    session_fixation_strategy: none
+    access_denied_url: /login
+    encoders:
+        # Our user class and the algorithm we'll use to encode passwords
+        # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
+        FOS\UserBundle\Model\UserInterface: bcrypt
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
+
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        in_memory:
+            memory:
+                users:
+                    memory-superadmin:
+                        password:   $2y$12$kuTt9c6D7ZCwr6oM.fwHQuqpJTWq6NIh16tyLCpw4pXBx6beMB6au # memory-superadmin
+                        roles:  'ROLE_SUPER_ADMIN'
+                    memory-admin:
+                        password:   $2y$12$3hDNpn.r5/5nb2JSBKLeBuSqRByEQI7GGb/zWKrWZ7rNKIykTtDYu # memory-admin
+                        roles:  'ROLE_ADMIN'
+                    memory-user:
+                        password:   $2y$12$LtrRIO/Ipr0EIMle0F0tAuztKnSReAQbT2PBO.v3B6QBwuMtTBe1m # memory-user
+                        roles:  'ROLE_USER'
+
+        # in this example, users are stored via Doctrine in the database
+        # To see the users at src/AppBundle/DataFixtures/ORM/LoadFixtures.php
+        # To load users from somewhere else: http://symfony.com/doc/current/cookbook/security/custom_provider.html
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+        chain_provider:
+            chain:
+                providers:  [ fos_userbundle, in_memory]
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            # this firewall applies to all URLs
+            pattern:    ^/
+            anonymous: true
+            # activate different ways to authenticate
+
+            provider: chain_provider
+
+            # http_basic: ~
+            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+            # This allows the user to login by submitting a username and password
+            # Reference: http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+            form_login:
+                # The route name that the login form submits to
+                #check_path: security_login_check
+                # The name of the route where the login form lives
+                # When the user tries to access a protected page, they are redirected here
+                #login_path: security_login_form
+                # Secure the login form against CSRF
+                # Reference: http://symfony.com/doc/current/cookbook/security/csrf_in_login_form.html
+                default_target_path: checkout
+                csrf_token_generator: security.csrf.token_manager
+                use_referer: true
+
+            logout:
+                target: fos_user_security_login
+            #target: homepage
+
+    role_hierarchy:
+
+        ROLE_BACKEND:
+            - ROLE_USER
+
+        ROLE_BACKEND_GUEST: # LIST, VIEW
+            - ROLE_BACKEND
+            - ROLE_SONATA_GUEST
+            - ROLE_APP_ADMIN_CAR_VIEW
+            - ROLE_APP_ADMIN_CAR_LIST
+            - ROLE_APP_ADMIN_ENGINE_SIZE_VIEW
+            - ROLE_APP_ADMIN_ENGINE_SIZE_LIST
+            - ROLE_APP_ADMIN_INVENTORY_VIEW
+            - ROLE_APP_ADMIN_INVENTORY_LIST
+            - ROLE_APP_ADMIN_MAKE_VIEW
+            - ROLE_APP_ADMIN_MAKE_LIST
+            - ROLE_APP_ADMIN_MODEL_VIEW
+            - ROLE_APP_ADMIN_MODEL_LIST
+            - ROLE_APP_ADMIN_REGISTRATION_VIEW
+            - ROLE_APP_ADMIN_REGISTRATION_LIST
+            - ROLE_APP_ADMIN_TAG_VIEW
+            - ROLE_APP_ADMIN_TAG_LIST
+
+        ROLE_BACKEND_CONTRIBUTOR: # EDIT, CREATE
+            - ROLE_BACKEND_GUEST
+            - ROLE_APP_ADMIN_CAR_EDIT
+            - ROLE_APP_ADMIN_CAR_CREATE
+            - ROLE_APP_ADMIN_ENGINE_SIZE_EDIT
+            - ROLE_APP_ADMIN_ENGINE_SIZE_CREATE
+            - ROLE_APP_ADMIN_INVENTORY_EDIT
+            - ROLE_APP_ADMIN_INVENTORY_CREATE
+            - ROLE_APP_ADMIN_MAKE_EDIT
+            - ROLE_APP_ADMIN_MAKE_CREATE
+            - ROLE_APP_ADMIN_MODEL_EDIT
+            - ROLE_APP_ADMIN_MODEL_CREATE
+            - ROLE_APP_ADMIN_REGISTRATION_EDIT
+            - ROLE_APP_ADMIN_REGISTRATION_CREATE
+            - ROLE_APP_ADMIN_TAG_EDIT
+            - ROLE_APP_ADMIN_TAG_CREATE
+
+        ROLE_BACKEND_STAFF: # DELETE, EXPORT
+            - ROLE_BACKEND_CONTRIBUTOR
+            - ROLE_APP_ADMIN_ITEM_VIEW
+            - ROLE_APP_ADMIN_ITEM_LIST
+            - ROLE_APP_ADMIN_ITEM_EXPORT
+            - ROLE_APP_ADMIN_ORDER_VIEW
+            - ROLE_APP_ADMIN_ORDER_LIST
+            - ROLE_APP_ADMIN_ORDER_EXPORT
+            - ROLE_APP_ADMIN_CAR_DELETE
+            - ROLE_APP_ADMIN_CAR_EXPORT
+            - ROLE_APP_ADMIN_ENGINE_SIZE_DELETE
+            - ROLE_APP_ADMIN_ENGINE_SIZE_EXPORT
+            - ROLE_APP_ADMIN_INVENTORY_DELETE
+            - ROLE_APP_ADMIN_INVENTORY_EXPORT
+            - ROLE_APP_ADMIN_MAKE_DELETE
+            - ROLE_APP_ADMIN_MAKE_EXPORT
+            - ROLE_APP_ADMIN_MODEL_DELETE
+            - ROLE_APP_ADMIN_MODEL_EXPORT
+            - ROLE_APP_ADMIN_REGISTRATION_DELETE
+            - ROLE_APP_ADMIN_REGISTRATION_EXPORT
+            - ROLE_APP_ADMIN_TAG_DELETE
+            - ROLE_APP_ADMIN_TAG_EXPORT
+            - ROLE_ADMIN_USER_EXPORT
+            - ROLE_ADMIN_USER_VIEW
+            - ROLE_ADMIN_USER_VIEW
+            - ROLE_ADMIN_USER_LIST
+            - ROLE_ADMIN_USER_LIST
+
+        ROLE_SONATA_ADMIN:  # +GRANT
+            - ROLE_BACKEND_STAFF
+            - ROLE_ADMIN_USER_EXPORT
+            - ROLE_APP_ADMIN_CAR_ALL
+            - ROLE_APP_ADMIN_ENGINE_SIZE_ALL
+            - ROLE_APP_ADMIN_INVENTORY_ALL
+            - ROLE_APP_ADMIN_MAKE_ALL
+            - ROLE_APP_ADMIN_MODEL_ALL
+            - ROLE_APP_ADMIN_REGISTRATION_ALL
+            - ROLE_APP_ADMIN_TAG_ALL
+#            - ROLE_APP_ADMIN_ITEM_EDIT
+#            - ROLE_APP_ADMIN_ORDER_EDIT
+
+        ROLE_CLIENT:             [ROLE_USER]
+        ROLE_GUEST:             [ROLE_BACKEND_GUEST]
+        ROLE_CONTRIBUTOR:       [ROLE_BACKEND_CONTRIBUTOR]
+        ROLE_STAFF:             [ROLE_BACKEND_STAFF]
+        ROLE_ADMIN:             [ROLE_SONATA_ADMIN]
+        ROLE_SUPER_ADMIN:       [ROLE_CLIENT, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_BACKEND_GUEST }
+        - { path: ^/admin, roles: ROLE_NO_USER_SHOULD_HAVE }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, roles: ROLE_SUPER_ADMIN, ips: [127.0.0.1/8, ::1, 192.168.0.0/16] }
+        - { path: ^/resetting, roles: ROLE_NO_USER_SHOULD_HAVE }
+        - { path: ^/profile, roles: ROLE_SUPER_ADMIN, ips: [127.0.0.1/8, ::1, 192.168.0.0/16] }
+        - { path: ^/profile, roles: ROLE_NO_USER_SHOULD_HAVE }

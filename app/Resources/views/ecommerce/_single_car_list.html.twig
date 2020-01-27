@@ -1,0 +1,44 @@
+{% if stock is defined and stock is not empty %}
+    {% set car = stock.getCar() %}
+    <tr car-id="{{ car.getId() }}" row-stock-id="{{ stock.getId() }}" stock="{{ stock.getQuantity() }}" class="{{ inCart ? "table-success" : "" }}">
+        <th scope="row">{{ car.getId() }}</th>
+        <td>{{ car.getName() }}</td>
+        <td>{{ car.getModel() }}</td>
+        <td>{{ car.getRegistration() }}</td>
+        <td>{{ car.getEngineSize() }}</td>
+        <td class="product-tags">
+            {% for tag in car.getTags() %}
+                <span class="badge badge-pill badge-warning">{{ tag }}</span>
+            {% endfor %}
+        </td>
+        <td stock-id="{{ stock.getId() }}">{{ stock.getQuantity() }}</td>
+        <td>${{ stock.getUnitPrice()|number_format(2) }}</td>
+        <td>
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button button-function="decrement" for-input="counter-{{ car.getId() }}"
+                        id="decrement-{{ car.getId() }}" type="button"
+                        class="btn-stock-change btn btn-outline-secondary btn-sm" disabled="disabled">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <input id="counter-{{ car.getId() }}" type="number" input-product-id="{{ car.getId() }}"
+                       class="form-control counter-input-number form-control-sm" value="1" min="1"
+                       max="{{ stock.getQuantity() }}" maxlength="3" size="3" pattern="[0-9]{1,3}">
+                <button button-function="increment" for-input="counter-{{ car.getId() }}"
+                        id="increment-{{ car.getId() }}" type="button"
+                        class="btn-stock-change btn btn-outline-secondary btn-sm"
+                        {{ stock.getQuantity() == 0 ?'disabled="disabled"':"" }}
+                >
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+
+            <button id="add-to-cart-button-{{ car.getId() }}" type="button" product-id="{{ car.getId() }}"
+                    class="btn btn-primary add-to-cart-btn btn-sm" {{ stock.getQuantity() == 0 ?'disabled="disabled"':"" }}>
+                <span class="spinner spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>
+                <i class="fas fa-shopping-cart"></i>
+                Add To Cart
+            </button>
+        </td>
+    </tr>
+{% endif %}

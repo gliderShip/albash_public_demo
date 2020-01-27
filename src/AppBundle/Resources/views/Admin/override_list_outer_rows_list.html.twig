@@ -1,0 +1,30 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% for object in admin.datagrid.results %}
+    {% set class = '' %}
+    {% if object.enabled is defined and object.enabled  == false %}
+        {% set class = 'disabled' %}
+    {% endif %}
+    {% if object.quantity is defined and object.quantity == 0 %}
+        {% set class = class~' out-of-stock' %}
+    {% endif %}
+    {% if object.expired is defined and object.expired == true %}
+        {% set class = class~' expired' %}
+    {% endif %}
+    {% if object.status is defined %}
+        {% set class = class~' '~object.status %}
+    {% endif %}
+
+    <tr class="{{ class }}">
+        {% include admin.getTemplate('inner_list_row') %}
+    </tr>
+{% endfor %}

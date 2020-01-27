@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>{% block title %}Best Cheap Car Marketplace{% endblock %}</title>
+
+    {% block stylesheets %}
+        <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'>
+        <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+              integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+              crossorigin="anonymous">
+
+        <link href='{{ asset('css/ecommerce.css') }}' rel='stylesheet'>
+
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+        <script type='text/javascript'
+                src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js'></script>
+        <script type='text/javascript' src='{{ asset('js/ecommerce.js') }}'></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    {% endblock %}
+
+    <link rel="shortcut icon" type="image/ico" href="{{ asset('img/car.ico') }}">
+    {% block metadata %}
+    {% endblock metadata%}
+</head>
+
+<body id="{% block body_id %}{% endblock %}">
+
+{% block body_javascripts %}
+{% endblock %}
+
+<div class="super_container">
+    {% block super_container %}
+        <!-- Header -->
+        <header class="header">
+            {% block header %}
+                {% include "ecommerce/_base_header.html.twig" %}
+            {% endblock header %}
+        </header>
+
+        {% block main %}
+        {% endblock main %}
+
+        <div style="height: 700px"></div>
+    {% endblock super_container %}
+</div>
+
+{% block javascripts %}
+
+{% endblock %}
+
+</body>
+</html>

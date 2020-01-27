@@ -1,0 +1,36 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends 'SonataAdminBundle:CRUD:base_list.html.twig' %}
+
+{% block list_table %}
+
+    {{ parent() }}
+
+    <style type="text/css">
+
+        tr.out-of-stock {
+            background-color: #ffc107 !important;
+        }
+
+        tr.expired, tr.disabled {
+            background-color: rgba(108, 117, 125, 0.5)! important
+        }
+
+        tr.paid {
+            background-color: #84e29a !important;
+        }
+
+
+
+    </style>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% block user_block %}
+    {% if app.user %}
+        {% set _bg_class          = "bg-light-blue" %}
+        {% set _logout_uri        = url('fos_user_security_logout') %}
+        {% set _logout_text       = 'Logout' %}
+        {% set _profile_text      = 'user_block_profile'|trans({}, 'SonataUserBundle') %}
+
+        <li class="user-footer bg-light-blue">
+
+            <div class="center">
+                <a href="{{ _logout_uri }}" class="btn btn-default btn-flat"><i class="fa fa-sign-out fa-fw"></i> {{ _logout_text }} -> {{ app.user }}</a>
+            </div>
+        </li>
+    {% endif %}
+{% endblock %}

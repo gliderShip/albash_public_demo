@@ -1,0 +1,26 @@
+<!-- Top Bar -->
+<div class="top_bar">
+    {% block top_bar %}
+        {% include "ecommerce/__top_bar.html.twig" %}
+    {% endblock top_bar %}
+</div>
+<!-- Header Main -->
+<div class="header_main">
+    {% block header_main %}
+        {% include "ecommerce/__header_main.html.twig" %}
+    {% endblock header_main %}
+</div>
+<!-- Main Navigation -->
+<nav class="main_nav">
+    {% block main_nav %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="position-absolute d-flex justify-content-center alert alert-{{ label }} alert-dismissible" style="left:0; right:0; margin: auto; width: 75%;">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% include "ecommerce/__main_nav.html.twig" %}
+    {% endblock main_nav %}
+</nav>

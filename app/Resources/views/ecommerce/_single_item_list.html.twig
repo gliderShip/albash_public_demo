@@ -1,0 +1,36 @@
+{% if cart is defined and cart is not empty %}
+    {% if inventory is defined and inventory is not empty %}
+
+        {% set items = cart.getItems() %}
+
+        {% for item in items %}
+            {% set car = item.getCar() %}
+            {% set stock = getStock(car, inventory) %}
+
+            <tr car-id="{{ car.getId() }}" stock="{{ stock.getQuantity() }}">
+                <th scope="row">{{ car.getId() }}</th>
+                <td>{{ car.getName() }}</td>
+                <td>{{ car.getModel() }}</td>
+                <td>{{ car.getRegistration() }}</td>
+                <td>{{ car.getEngineSize() }}</td>
+                <td class="product-tags">
+                    {% for tag in car.getTags() %}
+                        <span class="badge badge-pill badge-warning">{{ tag }}</span>
+                    {% endfor %}
+                </td>
+                <td stock-id="{{ stock.getId() }}">{{ stock.getQuantity() }}</td>
+                <td>${{ item.getunitPrice()|number_format(2) }}</td>
+                <td><input type="number" id="product-item-{{ car.getId() }}" quantity-product-id="{{ car.getId()}}" class="form-control counter-input-number cart-item-quantity" type="text" value="{{ item.getQuantity() }}" min="0"
+                           max="{{ stock.getQuantity()+item.getQuantity() }}"/></td>
+                <td total-price-product="{{ car.getId() }}" class="text-right">$<span>{{ item.getTotalPrice()|number_format(2) }}</span></td>
+                <td class="text-right">
+                    <button id="remove-button-{{ car.getId() }}" remove-product-id="{{ car.getId() }}" remove-item-id="{{ item.getId() }}" class="btn btn-sm btn-danger remove-item-btn">
+                        <span class="spinner spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"></span>
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+
+    {% endif %}
+{% endif %}

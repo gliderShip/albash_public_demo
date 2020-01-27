@@ -1,0 +1,66 @@
+{% extends 'MopaBootstrapBundle::base.html.twig' %}
+
+{% block html_tag %}
+<html lang="hu">
+{% endblock %}
+
+{% block head_style %}
+    <!-- Bootstrap core CSS -->
+    <link href="{{ app.request.basepath }}/assets/static/bootstrap3/css/bootstrap.css" rel="stylesheet">
+
+    {% block stylesheets %}
+
+        <!-- Custom styles for this template -->
+        <link href="{{ app.request.basepath }}/assets/static/theme/css/base.css" rel="stylesheet">
+    {% endblock %}
+{% endblock %}
+
+{% block title %}****{% endblock title %}
+
+{% block head_script %}
+    <script type="text/javascript">
+        symfony = {
+            request: {
+                basepath: '{{ app.request.basepath }}',
+                apppath: '{{ path('homepage') }}'
+            },
+            twig: {
+                globals: {
+                    lib_versions: {
+
+                    }
+                }
+            }
+        };
+    </script>
+{% endblock %}
+
+{% block head_bottom %}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="*****">
+    <meta name="author" content="*****">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    ...
+
+</div><!-- /.container -->
+<div id="system-messages-area"></div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{ app.request.basepath }}/assets/static/jquery/jquery-1.11.0.js"></script>
+<script src="{{ app.request.basepath }}/assets/static/bootstrap3/js/bootstrap.js"></script>
+{% block scripts %}
+
+    <!-- Other JavaScripts -->
+{% endblock %}
+{% endblock %}

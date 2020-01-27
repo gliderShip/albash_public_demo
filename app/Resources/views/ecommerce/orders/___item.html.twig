@@ -1,0 +1,7 @@
+{% if item is defined and item is not empty %}
+    {% set car = item.getCar() %}
+        <td>{{ car.getName() }} - {{ car.getModel() }}</td>
+        <td>{{ item.getQuantity() }}x</td>
+        <td>${{ item.getUnitPrice()|number_format(2) }}</td>
+        <td>${{ item.getTotalPrice()|number_format(2) }}</td>
+{% endif %}

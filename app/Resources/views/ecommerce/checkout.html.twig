@@ -1,0 +1,98 @@
+{% extends "ecommerce/base.html.twig" %}
+
+    {% if cart is defined and cart is not empty %}
+        {% block metadata %}
+            <meta http-equiv="refresh" content="{{ getTimeToLive(cart) }}">
+        {% endblock metadata %}
+    {% endif %}
+
+    {% block header %}
+        {% embed "ecommerce/_base_header.html.twig" %}
+            {% block header_main %}
+                {% block search_content %}
+                    <section class="jumbotron text-center">
+                        <div class="container">
+                            <h1 class="jumbotron-heading">My Cart</h1>
+                            <p class="lead">Don’t miss out! Limited &#x1f697; quantities available!</p>
+                            <span id="cart-countdown"
+                                  {% if cart is defined and cart is not empty %}
+                                      expires-at="{{ cart.getExpireAt()|date('Y-m-d H:i:s') }}"
+                                  {% endif %}
+                                    class="badge badge-info"
+                            >
+                            </span>
+                        </div>
+                    </section>
+                {% endblock search_content %}
+            {% endblock header_main %}
+        {% endembed %}
+    {% endblock header %}
+
+    {% block main %}
+
+        <div class="container mb-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Product Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Model</th>
+                                <th scope="col">Registration</th>
+                                <th scope="col">Engine Size</th>
+                                <th scope="col">Tags</th>
+                                <th scope="col">In Stock</th>
+                                <th scope="col" class="text-right">Unit Price</th>
+                                <th scope="col" class="text-center">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+
+                                {% include "ecommerce/_single_item_list.html.twig"  with {'cart': cart, 'inventory': inventory } only %}
+
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="10"><strong>Total</strong></td>
+                                <td class="text-right">$<strong
+                                            id="cart-amount-total">{{ cart ? cart.getTotalPrice()|number_format(2) : "0.00" }}</strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col mb-2">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 text-right ">
+                            {% if cart is defined and cart is not empty and not cart.isEmpty() %}
+                                <a id='pay-button' role="button" class="btn btn-lg btn-success text-uppercase"
+                                   href="{{ path('pay_cart') }}">Checkout</a>
+                                <a role="button" class="btn btn-lg btn-secondary" href="{{ path('product_list') }}">
+                                    Continue Shopping
+                                </a>
+                            {% else %}
+                                <a role="button" class="btn btn-lg btn-success" href="{{ path('product_list') }}">
+                                    Go Shopping!
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if orders is defined and orders is not empty or 1 %}
+            {% include "ecommerce/orders/_orders_history.html.twig" with {'orders': orders } only %}
+        {% endif %}
+
+
+
+    {% endblock main %}
+
+    {% block body_javascripts %}
+    {% endblock body_javascripts %}

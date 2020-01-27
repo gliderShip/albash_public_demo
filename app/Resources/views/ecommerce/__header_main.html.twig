@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <!-- Logo -->
+        <div class="col-lg-2 col-sm-3 col-3 order-1">
+            <div class="logo_container">
+                <div class="logo"><a href="#">1-CAR</a></div>
+            </div>
+        </div> <!-- Search -->
+        <div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+            <div class="header_search">
+                <div class="header_search_content">
+                    {% block search_content %}
+                        <div class="header_search_form_container">
+                            <form action="#" class="header_search_form clearfix">
+                                <div id="search-spinner" class="spinner-grow text-primary" role="status" style="display: none;">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <input id="input-search" type="search" required="required" class="header_search_input"
+                                       placeholder="Search for products...">
+
+                            </form>
+                        </div>
+                    {% endblock search_content %}
+                </div>
+            </div>
+        </div> <!-- Wishlist -->
+        <div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+            <div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+                <!-- Cart -->
+                <div class="cart">
+                    <div class="cart_container d-flex flex-row align-items-center justify-content-end">
+                        <div class="cart_icon"><img
+                                    src="{{ asset('img/cart.png') }}"
+                                    alt="">
+                            <div id='cart_count' class="cart_count">
+                                <span>
+                                    {% if cart is defined and cart is not empty %}
+                                        {{ cart.getTotalItems }}
+                                    {% else %}
+                                        0
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="cart_content">
+                            <div class="cart_text"><a href="{{ path('checkout') }}">Cart</a></div>
+                            <div id='cart_price' class="cart_price">
+                                {% if cart is defined and cart is not empty %}
+                                    $<span>{{ cart.getTotalPrice()|number_format(2) }}</span>
+                                {% else %}
+                                    $<span>0</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

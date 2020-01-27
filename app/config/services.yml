@@ -1,0 +1,114 @@
+parameters:
+#parameter_name: value
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+        bind:
+            $cartExpiration: '%cart_expiration%'
+
+    # makes classes in src/AppBundle available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    AppBundle\:
+        resource: '../../src/AppBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../../src/AppBundle/{Entity,Tests, Exception}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    AppBundle\Controller\:
+        resource: '../../src/AppBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+    # explicitly configure the service advised  As of Symfony 3.3
+
+    AppBundle\EventListener\SearchIndexer:
+        arguments:
+            - '@fos_elastica.object_persister.inventory.stock'
+            - '@fos_elastica.indexable'
+            - { index: post_index, type: post, identifier: id }
+            - '@logger'
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    app.admin.engine_size:
+        class: AppBundle\Admin\EngineSizeAdmin
+        arguments: [~, AppBundle\Entity\EngineSize, AppBundle:Admin\EngineSizeAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Warehouse, label: EngineSize }
+        public: true
+
+    app.admin.registration:
+        class: AppBundle\Admin\RegistrationAdmin
+        arguments: [~, AppBundle\Entity\Registration, AppBundle:Admin\RegistrationAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Warehouse, label: Registration }
+        public: true
+
+    app.admin.tag:
+        class: AppBundle\Admin\TagAdmin
+        arguments: [~, AppBundle\Entity\Tag, AppBundle:Admin\TagAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Warehouse, label: Tag }
+        public: true
+
+    app.admin.make:
+        class: AppBundle\Admin\MakeAdmin
+        arguments: [~, AppBundle\Entity\Make, AppBundle:Admin\MakeAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Warehouse, label: Make }
+        public: true
+
+    app.admin.model:
+        class: AppBundle\Admin\ModelAdmin
+        arguments: [~, AppBundle\Entity\Model, AppBundle:Admin\ModelAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Warehouse, label: Model }
+        public: true
+
+    app.admin.car:
+        class: AppBundle\Admin\CarAdmin
+        arguments: [~, AppBundle\Entity\Car, AppBundle:Admin\CarAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Warehouse, label: Car }
+        public: true
+
+    app.admin.inventory:
+        class: AppBundle\Admin\InventoryAdmin
+        arguments: [~, AppBundle\Entity\Inventory, AppBundle:Admin\InventoryAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Warehouse, label: Inventory }
+        public: true
+
+    app.admin.order:
+        class: AppBundle\Admin\OrderAdmin
+        arguments: [~, AppBundle\Entity\Order, AppBundle:Admin\OrderAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Orders, label: Order }
+        public: true
+
+    app.admin.item:
+        class: AppBundle\Admin\ItemAdmin
+        arguments: [~, AppBundle\Entity\Item, AppBundle:Admin\ItemAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Orders, label: Item }
+        public: true
+
+    admin.user:
+        class: AppBundle\Admin\UserAdmin
+        arguments: [~, AppBundle\Entity\User, ~]
+        calls:
+            - [setUserManager, ['@fos_user.user_manager']]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Users, label: User }

@@ -1,0 +1,31 @@
+{% if order is defined and order is not empty %}
+
+    {% set items = order.getItems() %}
+    {% set itemNr = items|length %}
+
+    <tr>
+        <th>Order</th>
+        <th>Date</th>
+        <th>Car</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Price</th>
+    </tr>
+
+    <tr>
+        <td rowspan="{{ itemNr+1 }}" class="align-middle">{{ index }}</td>
+        <td rowspan="{{ itemNr+1 }}" class="align-middle">{{ order.getUpdatedAt()|date('Y-m-d H:i') }}</td>
+        {% set first = items|first %}
+        {% include "ecommerce/orders/___item.html.twig" with {'item': first } only %}
+    </tr>
+    {% for item in items[1:] %}
+        <tr>
+            {% include "ecommerce/orders/___item.html.twig" with {'item': item } only %}
+        </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="3" class="text-right">Total:</td>
+        <td class="bg-warning">${{ order.getTotalPrice()|number_format(2) }}</td>
+    </tr>
+
+{% endif %}

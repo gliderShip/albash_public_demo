@@ -1,0 +1,19 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+
+{% block logo %}
+   {% apply spaceless %}
+       <a class="logo" href="{{ path('product_list') }}">
+           {% if 'single_image' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
+               <img src="{{ asset(sonata_admin.adminPool.titlelogo) }}"
+                    alt="{{ sonata_admin.adminPool.title }}">
+           {% endif %}
+           {% if 'single_text' == sonata_admin.adminPool.getOption('title_mode') or 'both' == sonata_admin.adminPool.getOption('title_mode') %}
+               <span>{{ sonata_admin.adminPool.title }}</span>
+           {% endif %}
+       </a>
+   {% endapply %}
+{% endblock %}
+
+{% block side_bar_after_nav_content %}
+
+{% endblock %}

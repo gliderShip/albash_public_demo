@@ -1,0 +1,19 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: albash
+    database_user: albash
+    database_password: '}$W4W2eU'
+    mailer_transport: smtp
+    mailer_host: smtp.gmail.com
+    mailer_user: erinhima@gmail.com
+    mailer_password: password
+    contact_phone: '+355693151056'
+    locale: en
+    secret: 7cfbee660d1e53ffafb4f887f45dcc4557585c27
+    website_host: 'http://104.248.249.221/'
+    ELASTICSEARCH_HOST: 'localhost'
+    ELASTICSEARCH_PORT: 9200
+    website_title: 1-CAR
+    cart_expiration: 4 # minutes

@@ -1,0 +1,50 @@
+imports:
+    - { resource: config.yml }
+
+#framework:
+#    validation:
+#        cache: validator.mapping.cache.apc
+#    serializer:
+#        cache: serializer.mapping.cache.apc
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            # 500 errors are logged at the critical level
+            #            action_level: critical
+            # to also log 400 level errors (but not 404's):
+            action_level: error
+            # excluded_404s:
+            #     - ^/
+
+            #            handler:      nested
+            handler:    grouped
+        grouped:
+            type:   group
+            members: [nested, deduplicated]
+        nested:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        deduplicated:
+            type:    deduplication
+            # the time in seconds during which duplicate entries are discarded (default: 60)
+            time: 120
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: "%mailer_user%"
+            to_email:   ["%mailer_user%"]
+            subject:    'An Error Occurred! %%message%%'
+            level:      debug
+            formatter:  monolog.formatter.html
+            content_type: text/html
+        console:
+            type:  console
